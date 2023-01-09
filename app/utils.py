@@ -24,16 +24,17 @@ def password_hash(password: str):
     return password_context.hash(password)
 
 def verify_password(password: str, hash_password: str):
+    """this function is verify password
+    """
     return password_context.verify(password, hash_password)
 
 def create_access_token(subject: Union[str, Any], expire_delta: int = None):
-
+    """this function is create access token
+    """
     if expire_delta is not None:
         expire_delta = datetime.utcnow() + expire_delta
     else:
-        expire_delta = datetime.utcnow() + timedelta(
-            minutes=ACCESS_TOKEN_EXPIRE_MINUTES
-        )
+        expire_delta = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
 
     to_encode = {"exp": expire_delta, "sub": str(subject)}
     encoded_jwt = jwt.encode(to_encode, JWT_SECRET_KEY, ALGORITHM)
@@ -41,13 +42,12 @@ def create_access_token(subject: Union[str, Any], expire_delta: int = None):
     return encoded_jwt
 
 def refresh_access_token(subject: Union[str, Any], expire_delta: int = None):
-
+    """this function is create refresh access token
+    """
     if expire_delta is not None:
         expire_delta = datetime.utcnow() + expire_delta
     else:
-        expire_delta = datetime.utcnow() + timedelta(
-            minutes=REFRESH_TOKEN_EXPIRE_MINUTES
-        )
+        expire_delta = datetime.utcnow() + timedelta(minutes=REFRESH_TOKEN_EXPIRE_MINUTES)
 
     to_encode = {"exp": expire_delta, "sub": str(subject)}
     encoded_jwt = jwt.encode(to_encode, JWT_REFRESH_SECRET_KEY, ALGORITHM)
@@ -80,8 +80,7 @@ class JWTBearer(HTTPBearer):
     def verify_jwt(self, jwtoken: str):
         isTokenValid: bool = False
         try:
-            payload = decodeJWT(jwtoken)
-            print(payload)
+            print(decodeJWT(jwtoken))
         except:
             payload = None
         print(payload)
